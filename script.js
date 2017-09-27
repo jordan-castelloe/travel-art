@@ -2,13 +2,20 @@ $(document).ready(function(){
 
 var map;
 var geocoder = new google.maps.Geocoder();
+var path = new google.maps.MVCArray();
+var service = new google.maps.DirectionsService();
 var lat;
 var long;
 var location;
-var poly;
-var path = [];
+var poly = new google.maps.Polyline({
+    strokeColor: '#000000',
+    strokeOpacity: 1.0,
+    strokeWeight: 3
+  });
+
 
 getLocation();
+
 
 
 //find the user's location
@@ -27,6 +34,7 @@ function success(pos) {
   lat = location.latitude;
   long = location.longitude;
   showMap();
+  poly.setMap(map);
   draw();
 };
 
@@ -67,28 +75,41 @@ function codeAddress() {
       };
       });
     };
- 
-function draw(){
-   poly = new google.maps.Polyline({
-          strokeColor: '#000000',
-          strokeOpacity: 1,
-          strokeWeight: 2
-        });
-        poly.setMap(map);
-        map.addListener('click', addLatLng);
-      }
 
-// Handles click events on a map, and adds a new point to the Polyline.
+function draw(){
+google.maps.event.addListener(map, "click", function(evt) {
+    if (path.getLength() === 0) {
+      path.push(evt.latLng);
+      poly.setPath(path);
+    } else {
+      service.route({
+        origin: path.getAt(path.getLength() - 1),
+        destination: evt.latLng,
+        travelMode: google.maps.DirectionsTravelMode.DRIVING
+      }, function(result, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          for (var i = 0, len = result.routes[0].overview_path.length;
+              i < len; i++) {
+            path.push(result.routes[0].overview_path[i]);
+          }
+        }
+      });
+    }
+  });
+}
+ 
+
 function addLatLng(event) {
   path = poly.getPath();
   path.push(event.latLng);
 }
+   
 
  $("#search").click(function(){
   codeAddress();
 });
   
-$("done").click(function(){
+$("#done").click(function(){
 var newCenter = map.getCenter();
 lat = newCenter.lat();
 long = newCenter.lng();
