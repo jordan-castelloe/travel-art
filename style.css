@@ -1,0 +1,35 @@
+*{
+	font-family: 'Open Sans Condensed', Serif;
+	text-align: center;
+	margin: 0.5;
+}
+
+#title, #done{
+	background-color: #a2dba3;
+	font-size: 250%;
+	width: 98vw;
+}
+
+#instructions{
+	font-size: 120%;
+	padding: 1em;
+	margin: auto;
+	width: 80vw;
+}
+
+.option{
+	display: inline-block;
+	vertical-align: top;
+	padding: 1em;
+}
+
+textarea{
+	width: 15em;
+}
+#map{
+	width: 98vw;
+	height: 60vh;
+	border: solid;
+	margin-bottom: 1em;
+
+}
