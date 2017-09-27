@@ -7,6 +7,8 @@ var service = new google.maps.DirectionsService();
 var lat;
 var long;
 var location;
+var directions = [];
+var step = $(".step")
 var poly = new google.maps.Polyline({
     strokeColor: '#000000',
     strokeOpacity: 1.0,
@@ -91,6 +93,9 @@ google.maps.event.addListener(map, "click", function(evt) {
           for (var i = 0, len = result.routes[0].overview_path.length;
               i < len; i++) {
             path.push(result.routes[0].overview_path[i]);
+            var direction = result.routes[0].legs[0].steps[i];
+            step.clone().insertAfter(step);
+            $(step).text(direction);
           }
         }
       });
@@ -99,10 +104,13 @@ google.maps.event.addListener(map, "click", function(evt) {
 }
  
 
-function addLatLng(event) {
-  path = poly.getPath();
-  path.push(event.latLng);
-}
+function printDirections(directions){
+  var numberOfDirections= beliefs.length;
+  for (var i = numberOfBeliefs; i >= 0; i--) {
+    entry.clone().insertAfter(entry);
+    $(entry).text(beliefs[i]);
+}};
+
    
 
  $("#search").click(function(){
@@ -113,7 +121,6 @@ $("#done").click(function(){
 var newCenter = map.getCenter();
 lat = newCenter.lat();
 long = newCenter.lng();
-console.log(path);
 })
 
 
