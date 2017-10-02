@@ -8,8 +8,10 @@ var lat;
 var long;
 var location;
 var directions = [];
-var pathResults = [];
-var step = $(".step")
+var instructions = [];
+var distances = [];
+var durations = [];
+var directionDOM = $("#directions");
 var poly = new google.maps.Polyline({
     strokeColor: '#000000',
     strokeOpacity: 1.0,
@@ -91,13 +93,20 @@ google.maps.event.addListener(map, "click", function(evt) {
         travelMode: google.maps.DirectionsTravelMode.DRIVING
       }, function(result, status) {
         if (status == google.maps.DirectionsStatus.OK) {
-          console.log(result);
-          pathResults.push(result.routes[0].overview_path);
-          directions.push(result.routes[0].summary);
+          distances.push(result.routes[0].legs[0].steps[0].distance);
+          durations.push(result.routes[0].legs[0].steps[0].duration);
+          instructions.push(result.routes[0].legs[0].steps[0].instructions)
+          for (var i = 0; i < instructions.length; i++){
+            var instruction = instructions[i];
+            var distance = distances[i].text;
+            var duration = durations[i].text;
+            $(directionDOM).clone().insertAfter(directionDOM);
+            $(directionDOM).text(instruction + " for " + distance + " or about " + duration)
+          }
           for (var i = 0; i < result.routes[0].overview_path.length; i++) {
             path.push(result.routes[0].overview_path[i]);
             }
-            printDirections(); 
+            
         
           }
       });
@@ -105,13 +114,6 @@ google.maps.event.addListener(map, "click", function(evt) {
   });
 }
  
-
-function printDirections(){
-   for (var i= 0; i < directions.length; i++){
-            step.clone().insertAfter(step);
-            $(step).text(directions[i]);
-        }
-};
 
    
 
