@@ -4,7 +4,7 @@
 	margin: 0.5;
 }
 
-#title, #done{
+#title{
 	background-color: #a2dba3;
 	font-size: 250%;
 	width: 98vw;
@@ -17,8 +17,8 @@
 	width: 80vw;
 }
 
-.option{
-	display: inline-block;
+#search-section{
+	margin: auto;
 	vertical-align: top;
 	padding: 1em;
 }
